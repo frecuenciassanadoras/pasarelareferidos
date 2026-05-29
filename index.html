@@ -245,10 +245,24 @@
                 document.getElementById('clics-totales').innerText = datos.total_clics;
                 document.getElementById('enlace-referido').innerText = `${API_RENDER}/ref/${datos.codigo_referido}`;
 
+                // Cargar Ventas
                 const listaVentas = document.getElementById('historial-ventas-lista');
                 listaVentas.innerHTML = datos.historial_ventas.length === 0 ? 
                     '<li class="history-item"><span class="date">Aún no hay ventas registradas.</span></li>' : 
                     datos.historial_ventas.map(v => `<li class="history-item"><span class="date">${v.fecha}</span><span>NeuroSync</span><span class="amount-plus">+$${v.monto.toFixed(2)}</span></li>`).join('');
+
+                // Cargar Retiros
+                const listaRetiros = document.getElementById('historial-retiros-lista');
+                if (datos.historial_retiros && datos.historial_retiros.length > 0) {
+                    listaRetiros.innerHTML = datos.historial_retiros.map(r => `
+                        <li class="history-item">
+                            <span class="date">${r.fecha}</span>
+                            <span style="color: var(--accent-cyan)">${r.estado}</span>
+                            <span class="amount-minus">-$${r.monto.toFixed(2)}</span>
+                        </li>`).join('');
+                } else {
+                    listaRetiros.innerHTML = '<li class="history-item"><span class="date">Aún no hay retiros registrados.</span></li>';
+                }
 
             } catch (error) {
                 console.error("Fallo:", error);
